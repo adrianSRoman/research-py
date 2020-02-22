@@ -6,7 +6,7 @@ from math import pi
 # Simulation parameters
 fs        = 240
 T         = 1/fs
-dur       = 50
+dur       = 250
 t         = np.linspace(0, dur, dur*fs)
 ntime     = t.size
 halfsamps = np.floor(ntime/2);
