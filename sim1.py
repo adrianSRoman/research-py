@@ -6,7 +6,7 @@ from math import pi
 # Simulation parameters
 fs        = 240
 T         = 1/fs
-dur       = 250
+dur       = 50
 t         = np.linspace(0, dur, dur*fs)
 ntime     = t.size
 halfsamps = np.floor(ntime/2);
@@ -88,8 +88,6 @@ for ispr in range(0, musicians.size):
 
 mean_asynchronies = mean_indiv.mean(0);
 plt.bar(np.arange(len(mean_asynchronies)), mean_asynchronies)
-                     
-# plt.plot(t, z.real)
-# plt.plot(locs_z, pks_z, marker="o", ls="", ms=3)
-#plt.plot(t, z[locs_z].real, marker="o", ls="", ms=3)
+
+
  

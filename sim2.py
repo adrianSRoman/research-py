@@ -135,8 +135,6 @@ for i in range(0, freqs_miss1.size):
     # Take mean of asynchronies over the four repetitions.
     mean_SPR_miss_pairs[i,:] = np.mean(np.absolute(np.take(t, z_locsFourCycles) - np.take(t, y_locsFourCycles)), 0)
     locs_z = pks_z = locs_F = pks_F = locs_y = pks_y = [] # Refresh ocations @ local maxima
-
-print(np.mean(mean_SPR_miss_pairs, 0))
                   
 
 f_1 = np.zeros(t.shape);  # Adaptive frequency osc1
@@ -233,5 +231,20 @@ for i in range(0, freqs_miss1.size):
     mean_SPR_match_pairs[i,:] = np.mean(np.absolute(np.take(t, z_locsFourCycles) - np.take(t, y_locsFourCycles)), 0)
     locs_z = pks_z = locs_F = pks_F = locs_y = pks_y = [] # Refresh ocations @ local maxima
 
-print(np.mean(mean_SPR_match_pairs, 0))
+
+# Create coupled bar plots
+fig, ax = plt.subplots()
+ind = np.arange(len(np.mean(mean_SPR_match_pairs, 0))) # x locations for the groups
+width = 0.25  # width of the bars
+p1 = ax.bar(ind, 1000 * np.mean(mean_SPR_match_pairs, 0), width, bottom=0)
+p2 = ax.bar(ind + width, 1000 * np.mean(mean_SPR_miss_pairs, 0), width, bottom=0)
+
+ax.set_title('Mean Absolute Asynchrony (ms)')
+ax.set_xticks(ind + width / 2)
+ax.set_xticklabels(('1', '2', '3', '4'))
+
+ax.legend((p1[0], p2[0]), ('Match', 'Missmatch'))
+ax.autoscale_view()
+
+plt.show()
  
