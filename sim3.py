@@ -16,8 +16,8 @@ slower = 1/0.800 # Hz
 
 a = 1
 b = -1
-l1 = 2*2.7
-l2 = 1.0/1000
+l1 = 5
+l2 = 0.0025
 nlearn = 8
 z = (0.0+1j)*np.ones(time.shape)
 
@@ -29,11 +29,11 @@ for i, f_s in enumerate([spr, faster, fast, slow, slower]):
 
 	x = np.exp(1j*2*np.pi*time*f_s)
 	x[int(nlearn*fs/f_s):] = 0
-	f = (spr+0.1*np.random.randn())*np.ones(time.shape)
+	f = (spr+0.01*np.random.randn())*np.ones(time.shape)
 
 	for n, t in enumerate(time[:-1]):
-		z[n+1] = z[n] + (T*f[n])*(z[n]*(a + 1j*2*np.pi + b*(np.power(np.abs(z[n]),2))) + x[n])
-		f[n+1] = f[n] + T*(-np.abs(f[n]-f_s)*l1*(np.real(x[n]))*np.sin(np.angle(z[n])) - f[n]*np.abs(spr-f[n])*l2*(f[n]-spr)/spr)
+		z[n+1] = z[n] + T*f[n]*(z[n]*(a + 1j*2*np.pi + b*(np.power(np.abs(z[n]),2))) + x[n])
+		f[n+1] = f[n] + T*(-np.power(np.abs(f[n]-f_s),2)*l1*(np.real(x[n]))*np.sin(np.angle(z[n])) - (np.power(np.abs(spr-f[n]),2))*l2*(f[n]-spr)/spr)
 	
 	print('###############################')
 	print('stimulus freq (Hz): ',f_s)
@@ -42,8 +42,7 @@ for i, f_s in enumerate([spr, faster, fast, slow, slower]):
 	#plt.plot(time,np.real(x))
 	#plt.plot(time,1/f)
 	#plt.show()
-	#plt.grid()
-	#plt.clf
+	#plt.close()
 	peaks, _ = find_peaks(np.real(z[int((nlearn+1.5)*fs/f_s):]))
 	peaks = 1000*peaks/fs # converting to miliseconds
 	slope, _, _, _, _ = linregress(range(len(np.diff(peaks))), np.diff(peaks))
@@ -52,7 +51,7 @@ for i, f_s in enumerate([spr, faster, fast, slow, slower]):
 	print('CV: ', cv)
 	#plt.plot(np.diff(peaks))
 	#plt.show()
-	#plt.clf
+	#plt.close()
 	if i == 0:
 		mean_slope = slope
 		spr_cv = cv
@@ -66,5 +65,3 @@ plt.bar(range(5),cvs)
 plt.subplot(1,2,2)
 plt.bar(range(4),slopes)
 plt.show()
-
-
